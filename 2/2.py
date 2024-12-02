@@ -1,5 +1,4 @@
 from sys import argv
-from typing import Optional
 
 
 def is_safe(report: list[int]) -> int:
@@ -14,34 +13,13 @@ def is_safe(report: list[int]) -> int:
     return result
 
 
-def is_safe_with_dampener(report: list[int], tolerance: int = 1) -> int:
-    if report[0] > report[1]:
-        sign = -1
-    elif report[0] < report[1]:
-        sign = 1
-    else:
-        return 0
-    least, most = min(1 * sign, 3 * sign), max(1 * sign, 3 * sign)
-    for i, level in enumerate(report[0:-1]):
-        if least <= report[i+1] - level <= most:
-            continue
-                
-        return 0
-    return 1
-    
-
-
 def part1(lines: list[str]) -> None:
     lines = [list(map(int, line.split())) for line in lines]
-    #for line in lines:
-    #print(is_safe(line), line)
-    print(sum(map(is_safe, lines))) 
+    print("part1:", sum(map(is_safe, lines))) 
 
 
 def part2(lines: list[str]) -> None:
     lines = [list(map(int, line.split())) for line in lines]
-    #for line in lines:
-    #print(is_safe_with_dampener(line), line)
     total = 0
     for line in lines:
         if is_safe(line):
@@ -51,9 +29,8 @@ def part2(lines: list[str]) -> None:
                 if is_safe(line[0:i]+line[i+1:]):
                     total += 1
                     break
-    print("total:", total)
+    print("part2:", total)
 
-    print(sum(map(is_safe_with_dampener, lines))) 
 
 def main() -> None:
     path = "input.txt"
@@ -67,3 +44,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
