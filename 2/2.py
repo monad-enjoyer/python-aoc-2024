@@ -1,4 +1,5 @@
 from sys import argv
+from typing import Optional
 
 
 def is_safe(report: list[int]) -> int:
@@ -21,37 +22,13 @@ def is_safe_with_dampener(report: list[int], tolerance: int = 1) -> int:
     else:
         return 0
     least, most = min(1 * sign, 3 * sign), max(1 * sign, 3 * sign)
-    def run_report(report: list[int]) -> bool:
-        for i, level in enumerate(report[0:-1]):
-            if least <= report[i+1] - level <= most:
-                continue
-            return False
-        return True
-    has_bad = False
-    popped = None
     for i, level in enumerate(report[0:-1]):
         if least <= report[i+1] - level <= most:
             continue
-        has_bad = True
-        nu_report = report[0:i] + report[i+1:]
-        popped = f"{report[i]} at index {i}"
-        break
-    if not has_bad:
-        print('passed', report)
-        return 1
-    for i, level in enumerate(nu_report[0:-1]):
-        if least <= nu_report[i+1] - level <= most:
-            continue
-        print("bad", report, popped, nu_report)
-        #print(report)
+                
         return 0
-    print("saved", report, popped, nu_report)
     return 1
-        
-    if bad_levels <= tolerance:
-        return 1
-    else:
-        return 0
+    
 
 
 def part1(lines: list[str]) -> None:
@@ -65,6 +42,17 @@ def part2(lines: list[str]) -> None:
     lines = [list(map(int, line.split())) for line in lines]
     #for line in lines:
     #print(is_safe_with_dampener(line), line)
+    total = 0
+    for line in lines:
+        if is_safe(line):
+            total += 1
+        else:
+            for i in range(len(line)):
+                if is_safe(line[0:i]+line[i+1:]):
+                    total += 1
+                    break
+    print("total:", total)
+
     print(sum(map(is_safe_with_dampener, lines))) 
 
 def main() -> None:
